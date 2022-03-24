@@ -30,7 +30,7 @@ services:
       - qg_app
     volumes:
       - ./qg_app_frontend:/qg_app_frontend
-      - /qg_app_frontend/node_modules
+      - ./qg_app_frontend/node_modules:/node_modules
     ports:
       - "3000:3000"
     deploy:
