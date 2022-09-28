@@ -1,9 +1,20 @@
 \Chapter{Bevezetés}
 
-A fejezet célja, hogy a feladatkiírásnál kicsit részletesebben bemutassa, hogy miről fog szólni a dolgozat.
-Érdemes azt részletezni benne, hogy milyen aktuális, érdekes és nehéz probléma megoldására vállalkozik a dolgozat.
+A természetes nyelvfeldolgozás az informatika egyik legkomplexebb feladatköre. Ennek egyik oka, hogy az emberi nyelv és annak kialakulása szorosan összefügg az emberi aggyal és annak evolúciójával, melyet még a mai napig se sikerült teljesen feltérképeznünk és megértenünk. Nyelvünk értő használata egyike azon utolsó problémaköröknek, amiket a számítógépek eddig nem voltak képesek még megközelítőleg se megfelelően teljesíteni, hiszen akár már egy egyszerű mondat feldolgozásához, kontextusban való elhelyezéséhez vagy akár kibővítéséhez is óriási méretű szabályhalmazokra és számítási teljesítményre van szükség.\\
+Vegyük példának ezt a mondatot:
 
-Ez egy egy-két oldalas leírás.
-Nem kellenek bele külön szakaszok (section-ök).
-Az irodalmi háttérbe, a probléma részleteibe csak a következő fejezetben kell belemenni.
-Itt az olvasó kedvét kell meghozni a dolgozat többi részéhez.
+\vspace{0.5cm}
+\centerline{,,Ausztriában lopott autóval karambolozott három magyar fiatal.''}
+\vspace{0.5cm}
+
+\noindent Ez a mondat akár 4 különböző jelentést is takarhat:
+
+\begin{itemize}
+\item Az autót Ausztriában tulajdonították el és így karamboloztak.
+\item Ausztria területén történt a karambol.
+\item Az autó amiben ültek lopott volt.
+\item Az autó amivel összeütköztek volt lopott.
+\end{itemize}
+
+Mind a 4 értelmezés helyes nyelvtanilag és értelmezésük pusztán attól függ, hogy hogyan tagoljuk a mondatot az elemzés során. Természetesen a mondat pontos jelentése egyértelművé válik, amint megismerjük a kontextust, amelyben a mondat elhangzott, de mindehhez komplex háttértudásra van szükségünk. Ennek a háttértudásnak az ismerete hiányzott eddig a különböző NLP feladatok megoldására írt programokból, hiszen ezek rengeteg adatot, metaadatot, szabályt és egyéb heurisztikát igényelnek. Mi emberek az evolúció, illetve az egyéni fejlődés során gyerekkortól megismertük ezt a szükséges háttértudást egy ilyen mondat értelmezéséhez, viszont a gépek nem rendelkeztek eddig az ehhez szükséges eszköztárral. 
+

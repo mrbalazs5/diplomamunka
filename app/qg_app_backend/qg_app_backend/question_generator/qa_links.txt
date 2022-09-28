@@ -1,0 +1,2 @@
+http://deepx.ucsd.edu/public/jmcauley/qa/data/qa_Appliances.json.gz
+http://deepx.ucsd.edu/public/jmcauley/qa/data/qa_Beauty.json.gz

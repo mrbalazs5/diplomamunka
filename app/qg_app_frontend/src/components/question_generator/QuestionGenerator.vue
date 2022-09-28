@@ -145,6 +145,8 @@
   .generator-output {
     margin-left: 10px;
     margin-right: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     .sub-title {
       margin: 0;

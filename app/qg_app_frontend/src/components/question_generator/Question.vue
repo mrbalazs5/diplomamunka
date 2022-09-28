@@ -39,7 +39,7 @@
 <style lang="scss" scoped>
   .question {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     margin-bottom: 10px;
     font-size: 18px;
