@@ -1,0 +1,35 @@
+@import "fonts";
+@import "variables";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+
+a {
+  color: $base-text-color;
+  text-decoration: none;
+}
+
+body {
+  color: $base-text-color;
+  min-height: 100vh;
+  background-color: $app-bg-color;
+  line-height: 1.6;
+  font-family: $base-font;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.page-title {
+  font-size: 34px;
+  text-align: center;
+  margin: 20px 0 20px 0;
+  font-weight: bold;
+}
