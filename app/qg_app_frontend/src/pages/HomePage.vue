@@ -6,10 +6,10 @@
 </template>
 
 <script lang="ts">
-  import QuestionGenerator from "@/components/question_generator/QuestionGenerator.vue";
+import QuestionGenerator from "@/components/question_generator/QuestionGenerator.vue";
 
-  export default {
-    name: "HomePage",
-    components: {QuestionGenerator}
-  }
+export default {
+  name: "HomePage",
+  components: { QuestionGenerator },
+};
 </script>

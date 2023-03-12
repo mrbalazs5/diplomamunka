@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import IconCopyToClipboard from '../icons/IconCopyToClipboard.vue'
-  import Tooltip from "@/components/tooltip/Tooltip.vue";
+import IconCopyToClipboard from "../icons/IconCopyToClipboard.vue";
+import Tooltip from "@/components/tooltip/Tooltip.vue";
 </script>
 
 <template>
@@ -15,46 +15,51 @@
 </template>
 
 <script lang="ts">
-  import useClipboard from "@/utils/useClipboard";
+import useClipboard from "@/utils/useClipboard";
+import { defineComponent } from "vue";
 
-  const { toClipboard } = useClipboard();
+const { toClipboard } = useClipboard();
 
-  export default {
-    name: "Question",
-    props: {
-      text: String
-    },
-    methods: {
-      copyToClipboard: async function (loginData) {
-        try {
-          await toClipboard(this.text);
-        } catch (e) {
-          console.error("Failed to copy question", e);
+export default defineComponent({
+  name: "Question",
+  props: {
+    text: String,
+  },
+  methods: {
+    copyToClipboard: async function () {
+      try {
+        if (!this.text) {
+          return;
         }
+
+        await toClipboard(this.text);
+      } catch (e) {
+        console.error("Failed to copy question", e);
       }
-    }
-  }
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
-  .question {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin-bottom: 10px;
-    font-size: 18px;
-  }
+.question {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
 
-  .copy-btn {
-    display: inline-block;
-    margin-left: 10px;
-    width: 20px;
-    transition: 0.5s;
-    stroke: #088522;
-    cursor: pointer;
+.copy-btn {
+  display: inline-block;
+  margin-left: 10px;
+  width: 20px;
+  transition: 0.5s;
+  stroke: #088522;
+  cursor: pointer;
 
-    &:hover {
-      stroke: #ffffff;
-    }
+  &:hover {
+    stroke: #ffffff;
   }
+}
 </style>

@@ -6,7 +6,7 @@ services:
     build:
       context: ./
       dockerfile: Docker/qg_app_backend/Dockerfile
-    command: tail -f /dev/null # python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
     networks:
@@ -36,7 +36,7 @@ services:
       - qg_app
     volumes:
       - ./qg_app_frontend:/qg_app_frontend
-      - /qg_app_frontend/node_modules
+      - ./qg_app_frontend/node_modules:/qg_app_frontend/node_modules
     ports:
       - "3000:3000"
     deploy:
