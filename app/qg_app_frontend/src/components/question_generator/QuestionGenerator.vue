@@ -66,7 +66,7 @@ export default defineComponent({
       this.isLoaded = false;
 
       axios
-        .post(`${process.env.BASE_URL}/api/generate-questions`, {
+        .post(`${import.meta.env.VITE_BASE_URL}/api/generate-questions`, {
           context: this.context,
         })
         .then((response) => {
