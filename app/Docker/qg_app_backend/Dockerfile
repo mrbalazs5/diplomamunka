@@ -23,3 +23,5 @@ RUN git clone https://github.com/google/sentencepiece.git \
     && pip install dist/sentencepiece*.whl
 
 RUN pip install -r requirements.txt
+
+EXPOSE 80
