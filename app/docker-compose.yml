@@ -4,8 +4,8 @@ services:
   qg_app_backend:
     container_name: qg_app_backend
     build:
-      context: Docker/qg_app_backend
-      dockerfile: Docker/qg_app_backend/Dockerfile
+      context: qg_app_backend
+      dockerfile: qg_app_backend/Dockerfile
     command: python manage.py runserver 0.0.0.0:80
     ports:
       - "80:80"
@@ -27,8 +27,8 @@ services:
   qg_app_frontend:
     container_name: qg_app_frontend
     build:
-      context: Docker/qg_app_frontend
-      dockerfile: Docker/qg_app_frontend/Dockerfile
+      context: qg_app_frontend
+      dockerfile: qg_app_frontend/Dockerfile
     command: yarn dev
     depends_on:
       - qg_app_backend
