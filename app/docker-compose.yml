@@ -6,7 +6,6 @@ services:
     build:
       context: qg_app_backend
       dockerfile: qg_app_backend/Dockerfile
-    command: python manage.py runserver 0.0.0.0:80
     ports:
       - "80:80"
     networks:
