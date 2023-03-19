@@ -28,7 +28,6 @@ services:
     build:
       context: qg_app_frontend
       dockerfile: qg_app_frontend/Dockerfile
-    command: yarn dev
     depends_on:
       - qg_app_backend
     networks:

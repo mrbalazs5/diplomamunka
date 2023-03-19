@@ -8,3 +8,5 @@ COPY . /qg_app_frontend/
 RUN yarn install
 
 EXPOSE 3000
+
+CMD [ "yarn", "dev" ]
