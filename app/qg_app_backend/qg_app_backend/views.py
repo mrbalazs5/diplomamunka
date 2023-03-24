@@ -11,7 +11,8 @@ def runModel(input_string, **generator_args):
 
   generator_args = {
       "max_length": 256,
-      "num_beams": 4,
+      "num_beams": 10,
+      "num_return_sequences": 10,
       "length_penalty": 1.5,
       "no_repeat_ngram_size": 3,
       "early_stopping": True

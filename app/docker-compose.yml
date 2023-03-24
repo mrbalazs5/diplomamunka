@@ -4,8 +4,8 @@ services:
   qg_app_backend:
     container_name: qg_app_backend
     build:
-      context: qg_app_backend
-      dockerfile: qg_app_backend/Dockerfile
+      context: ./qg_app_backend
+      dockerfile: ./Dockerfile
     ports:
       - "80:80"
     networks:
@@ -26,8 +26,8 @@ services:
   qg_app_frontend:
     container_name: qg_app_frontend
     build:
-      context: qg_app_frontend
-      dockerfile: qg_app_frontend/Dockerfile
+      context: ./qg_app_frontend
+      dockerfile: ./Dockerfile
     depends_on:
       - qg_app_backend
     networks:
