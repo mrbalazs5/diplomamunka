@@ -84,8 +84,44 @@ A program nagyon egyszerű felhasználói interfészt használ. Adott 2 oldal: a
 \label{fig:app_ui_2}
 \end{figure}
 
-\Section{Felhasznált programkönyvtárak bemutatása}
+\Section{Felhasznált fejlesztői eszközök bemutatása}
 
-Mielőtt bemutatnám az alkalmazás részletes működését, szeretném ismertetni a felhasznált szerveroldali programkönyvtárakat(API-kat), melyek jelentősen megkönnyítették a fejlesztést.
+Mielőtt bemutatnám az alkalmazás részletes működését, szeretném ismertetni a fontosabb felhasznált, elsősorban szerveroldali programkönyvtárakat(API-kat), melyek jelentősen megkönnyítették a fejlesztést. Ezen könyvtárak szinte mindegyike feltelepíthető a Python alapértelmezett csomagkezelőjével, a \textbf{pip}-el.
+
+\SubSection{datasets}
+
+A \textbf{datasets} könyvtár számos hasznos funkciót tartalmaz különböző adatforrások betöltésére, feldolgozására és megosztására. Nagyon sokan használják az NLP, számítógépes látás, adatfeldolgozás területén. Előnye, hogy képes nagy méretű adatforrásokat gyorsan és optimálisan a memóriában tárolni, ahonnan később felhasználhatjuk azt alkalmazásunkban. Legfontosabb metódusa a \textbf{load\_dataset} metódus, melynek segítségével betölthetjük lokális vagy online formában elérhető adatforrásainkat.
+
+\SubSection{transformers}
+
+Ez a könyvtár felelős az előtanított hálózatok kezeléséért. Lehetőség van letölteni különböző betanított neurális hálózatokat, melyeket később tovább taníthatunk(fine-tuning), illetve fel is tölthetünk a Hugging Face Hub nevű platformra, ahonnan futtathatjuk és meg is oszthatjuk másokkal megoldásainkat. Ez a megközelítése a mesterséges intelligencia alapú hálózatoknak úttörő jelentőségű, hiszen nagyon közel áll az emberi agy működéséhez, melynek működési alapelve a folyamatos tanulás és a különböző  feladatokra való specializálódás.
+
+Az első fontosabb funkció a könyvtárban a \textbf{pipeline} metódus, melynek segítségével különböző feladatokra specializálódott előtanított hálózatokat használhatunk \\
+kódunkban\cite{hf}. A metódus meghívásánál egyszerűen csak meg kell neveznünk a kívánt feladatot, választhatunk egy modellt, aminek segítségével fogja megoldani a feladatot, illetve biztosítanunk kell egy paramétert neki, ami a feladattól függően lehet egy kép, hangfájl, szövegrészlet vagy egyéb egyszerűbb értékek is. A metódus eredménye végül egy objektum lesz, mely a megoldásokat tartalmazza és szintén tetszőleges típusú lehet. A végeredmények mellé általában társul valamilyen statisztika is, hogy a modell milyen biztossággal állította elő az adott eredményt.
+
+Egy másik lényeges koncepció a könyvtárban az ún. \textbf{tokenizer}-ek, melyek a modellek bemenetének előkészítésében játszanak jelentős szerepet. Működésük során a bemeneti szövegrészeket különböző egységekre bontják és ellátják őket azonosítókkal, majd pedig az elkészült token-eket kódolják\cite{hf}. Ezt a folyamatot visszafelé is képesek megcsinálni, így tokenekből képesek dekódolni az elkészült szöveges eredményeket. Az alap funkciókon felül saját kódolást és feldolgozási lépéseket is hozzáadhatunk működésükhöz, ezáltal tudjuk feladatunkhoz szabni őket. Az alap tokenizer osztály a \textbf{PreTrainedTokenizerBase}, mely tartalmazza a kódoláshoz, dekódoláshoz, tokenizáláshoz és speciális tokenek definiálásához szükséges funkciókat. Ezt az osztályt kiterjesztve lehet saját tokenizer-t is készíteni.
+
+A modellek tanításához a könyvtár biztosítja a \textbf{Trainer} osztályt. Ez az osztály felel az alap tanítási ciklus elkészítéséért. Támogatja az elosztott, párhuzamos tanítást is grafikus processzoron(GPU), illetve tenzor-feldolgozó egységen(TPU). Argumentumként meg kell adnunk a Trainer-nek a modellünket, amit tanítani szeretnénk, a tanító, illetve validáló adathalmazokat, valamint egy \textbf{DataCollator} osztályt, ami az adathalmazok csoportokra bontásáért felel, így gyorsítva a tanítást. Ezen kívül megadhatunk egy \textbf{TrainingArguments} objektumot neki, ahol beállíthatjuk\cite{hf}:
+
+\begin{itemize}
+\item a különböző hardveren való tanítással kapcsolatos attribútumokat
+\item a tanulási rátát
+\item a tanulási ciklusok számát
+\item hány lépésenként mentse el a hálózat aktuális állapotát
+\item készítsen-e jelentéseket a hálózat adott pillanataiban a súlyairól és hiba rátájáról
+\item elmentse-e lokálisan vagy a Hugging Face Hub nevű oldalra az elkészült hálózatot
+\end{itemize}
+
+Az utolsó fontosabb funkciója a könyvtárnak a \textbf{modellek}, melyek a már ténylegesen elkészült, betanított neurális hálózatainkat fogják kezelni. A könyvtár által biztosított \textbf{PreTrainedModel} osztályok tartalmazzák az olyan funkciókat, mint a hálózatok betöltése egy adott lokális vagy online elérhető helyről, a hálózat mentése, illetve a bemeneti tokenek átméretezése a tokenizernek és a hálózatnak megfelelő méretre\cite{hf}. Ezen osztályra épül az általam használt \textbf{T5ForConditionalGeneration} nevű modell osztály is, mely képes eltárolni és kezelni az előtanított T5 modelleket, illetve kompatibilis a \textbf{T5Tokenizer} osztályokkal is, így könnyítve a tanítóhalmazok és a végeredmények feldolgozásán. A T5-höz hasonlóan lehet találni más modell osztályokat is a könyvtárban, például léteznek BERT-hez, GPT-hez és ezek különböző változataihoz készült modellek és tokenizerek is.
+
+\SubSection{torch}
+
+A \textbf{torch} biztosítja számunkra a hardveres gyorsítást. Segítségével tanítóhalmazunkat eltárolhatjuk ún. tenzorokban, melyek lényegében azonos típusú adatokat tartalmazó többdimenziós mátrixok és ezeket felhasználva tudjuk tanítani neurális hálózat modellünket általános processzoron, grafikus processzoron vagy tenzor-feldolgozó egységen. A \textbf{transformers} könyvtár is támogatja a torch-al való hardveres gyorsítás használatát a \textbf{DataCollator} osztályokon keresztül, melyek pont a tanítási adatok csoportosításáért felelnek. A könyvtár használatával jelentősen fel tudtuk gyorsítani a tanítási és szöveggenerálási időket alkalmazásunk esetében is.
+
+\SubSection{SQuAD adathalmaz}
+
+A \textbf{Stanford Question Answering Dataset(SQuAD)\cite{squad}} a Stanford Egyetem által készített szabad hozzáférésű szövegértési adathalmaz. Több mint 100 000 kontextus-kérdés-válasz hármasból áll, melyeket Wikipedia cikkek alapján állítottak össze. Az egyes adatrekordokhoz tartozik egy rövidebb szöveges kontextus, 4-5 kérdés, illetve minden kérdéshez néhány helyes válasz. Az egyes válaszoknál az is meg van adva, hogy a kontextusban hol található meg a válasz(ez inkább a kérdés megválaszolási feladatoknál fontos szempont). Alkalmazásunkban ezt az adathalmazt használtuk a kérdésgeneráló T5 alapú neurális hálózat betanítására. Ehhez egy adatbetöltő szkriptet használtunk, mely csatolva lett a dolgozathoz, illetve a \url{https://huggingface.co/datasets/squad/blob/main/squad.py} URL alatt is elérhető.
+
+
 
 \Section{A program részletes működése}
