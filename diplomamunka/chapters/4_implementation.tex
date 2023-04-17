@@ -17,11 +17,28 @@ Ez a webalkalmazás a dolgozatomban bemutatott módszerek gyakorlati alkalmazás
 
 \Section{A program megtervezése}
 
-Az alkalmazás elkészítését hosszas tervezőfolyamat előzte meg. Első lépésként választani kellett egy megközelítési módot az alapfeladat megvalósításához. Számos módszertan létezik a kérdésgeneráláshoz, de én végül a neurális hálózat alapú megoldás mellett döntöttem, azon belül is a már részben előtanított transformer modellek mellett, melyek már rendelkeznek alapvető háttértudással, így már csak a kérdésgenerálás megvalósítására kell megtanítani őket.
+Az alkalmazás elkészítését hosszas tervezőfolyamat előzte meg. Első lépésként választani kellett egy megközelítési módot az alapfeladat megvalósításához. Számos módszertan létezik a kérdésgeneráláshoz, de végül a neurális hálózat alapú megoldás mellett döntöttünk, azon belül is a már részben előtanított transformer modellek mellett, melyek már rendelkeznek alapvető háttértudással, így már csak a kérdésgenerálás megvalósítására kell megtanítani őket.
 
-Következő lépésként el kellett dönteni, hogy milyen nyelven történjen a kérdésgenerálás. Itt szükséges volt összeszedni, hogy az egyes nyelveken milyen mennyiségben áll rendelkezésre tanítóhalmaz a neurális hálózat tanításához, hiszen elengedhetetlen, hogy a hálózat lásson kontextusokat és hozzájuk készült kérdéseket mintának, ami alapján később képes lesz saját magától is hasonló kérdéseket alkotnia. Végül az angol nyelvre esett a választás, mert ezen a nyelven találtunk megfelelő tanítóhalmazt és a feladathoz illő alaptudással rendelkező hálózatot, melyet később tovább tudtunk tanítani.
+Következő lépésként el kellett dönteni, hogy milyen nyelven történjen a kérdésgenerálás. Itt szükséges volt összeszedni, hogy az egyes nyelveken milyen mennyiségben áll rendelkezésre tanítóhalmaz a neurális hálózat tanításához, hiszen elengedhetetlen, hogy a hálózat lásson kontextusokat és hozzájuk készült kérdéseket mintának, ami alapján később képes lesz saját magától is hasonló kérdéseket alkotni. Végül az angol nyelvre esett a választás, mert ezen a nyelven találtunk megfelelő tanítóhalmazt és a feladathoz illő alaptudással rendelkező hálózatot, melyet később tovább tudtunk tanítani.
 
-Ezután a megfelelő transformer hálózat kiválasztása következett. Számos hálózat létezik, melyekkel megoldható a feladat, azonban a legtöbbjük vagy már elavult, vagy fizetős az elérése, így végül a modernebb és nagyobb tudású, ingyenesen elérhető T5 nevű modell mellett döntöttem.
+Ezután a megfelelő transformer hálózat kiválasztása következett. Számos modellt megvizsgáltunk az alapján, hogy:
+
+\begin{itemize}
+	\item Mennyire megoldható rajta feladatunk?
+	\item Mennyire optimális a működése?
+	\item Tudjuk-e saját gépen vagy egyéb szerveren futtatni, tárolni és tanítani?
+	\item Mekkora a mérete?
+	\item Kellően fejlett-e a feladat megoldásához?
+	\item Ingyenesen elérhető-e és lehet-e tovább tanítani?
+\end{itemize}
+
+Először a BERT modellt vizsgáltuk. Számos kutatást és cikket találtunk a témában, melyek sikeresen alkalmazták a BERT-et több NLP feladatra. Kérdésgenerálásra is alkalmazhatónak tűnt, azonban a tanítása nehézkesnek bizonyult, illetve nagyon hamar találtunk sokkal jobb és kifejezetten szöveggenerálásra használható modelleket, melyek könnyebben kezelhetők, gyorsabbak és jobb eredményeket is produkáltak.
+
+A GPT-2 nevű modell már ígéretesebbnek tűnt, hiszen kifejezetten szöveggenerálásra hozták létre és kb. 40 GB szöveges adattal tanították be, ami már jelentős eredménynek számított a területen. Ingyenesen elérhető és letölthető, valamint szabadon lehet tovább tanítani is. Szöveggenerálási eredményei elég jók voltak és számos kutatást találtunk, ahol kérdés megválaszolásra és kérdés generálásra tanítják, de más modellekkel összehasonlítva nem ezt találtuk a legjobbnak.
+
+A GPT-3 modell minden szempontból túlszárnyalta elődjét. Amellett, hogy a hálózat architektúráját átszervezték, jelentősen növelték a tanulási paramétereinek számát és a tanítási adathalmaz méretét is, így rendkívül jó eredményeket produkál szinte az összes NLP feladat esetén, így a kérdésgenerálásban is. Egyetlen hátránya a modellnek a mi szempontunkból, hogy csak korlátozottan használható és jelenleg nem ingyenes a hozzáférése.
+
+Számunkra a legmegfelelőbb modellnek a Google T5 nevezetű modellje bizonyult, ami már kifejezetten fejlett, kiválóan alkalmazható mindenféle szöveggenerálási feladatra és nagyon könnyen betanítható kérdésgenerálásra, amellett, hogy meglehetősen kedvező méretű. A Hugging Face nevű oldalon ingyenesen elérhető módon meg is található betanított változatban, melyet tovább tanítva megoldhattuk feladatunkat.
 
 Mivel az alkalmazás céljai között szerepel, hogy online elérhető legyen, így ezután elkezdődhetett a szerveroldali működés kidolgozása. A szerver programozási nyelvénél a Python-ra esett a választás, mivel nagyon hasznos könyvtárai vannak adatelemzés és statisztika területén, illetve webfejlesztési területen elérhető hozzá egy Django nevű szerveroldali keretrendszer is, mely jelentősen megkönnyítette a szerver elkészítését. Magának a szervernek egyetlen főbb végpontot kellet biztosítani, ami a megadott szöveges kontextust fogadja és válaszként visszaadja az elkészült kérdéseket. Miután az alkalmazás nem tárol felhasználói adatokat, így adatbázisszerver nem lett konfigurálva hozzá, de a rendszer úgy lett kialakítva, hogy ha idővel mégis szükség lenne rá, akkor könnyen be lehet csatlakoztatni egy tetszőleges adatbázist. 
 
@@ -125,3 +142,30 @@ A \textbf{Stanford Question Answering Dataset(SQuAD)\cite{squad}} a Stanford Egy
 
 
 \Section{A program részletes működése}
+
+\SubSection{A hálózat tanításáért felelős komponens}
+
+Mint azt már a tervezési részben említettem a tanításért felelős komponensek hardverigényük miatt szeparált fájlba és környezetbe kerültek a program többi részétől annak érdekében, hogy megfelelő és költséghatékony helyen lehessen őket futtatni. Emiatt a hálózat tanítási részét egy Python alapú \textit{.ipynb} fájlba szerveztük, melyet a Google Colab nevű felhőalapú környezetben tudtunk lefuttatni. 
+
+A szükséges könyvtárak importálása után a program kér egy bejelentkezést a Hugging Face Hub nevű platformra, melyre később a már betanított hálózatot fogja menteni, illetve kéri az adathalmazt is, mely esetünkben a csatolt \textit{t5\_squad.py} fájl lesz, ami a SQuAD adathalmazt fogja letölteni és megfelelő formátumra alakítani a későbbi feldolgozáshoz.
+
+A következő lépés az adatok előfeldolgozása. Itt már szükséges volt definiálnunk az alap transformer modellünket, ami a \textit{t5-base} lesz, mert az előfeldolgozáshoz szükségünk van egy tokenizer-re, melynek mérete meg kell egyezzen a modell bemeneti token mátrixának méretével, így ezt itt be kell állítanunk. Ezután következhet a nyers adathalmaz tokenekre bontása és kódolása, melyet az alap modellhez tartozó tokenizer segítségével végezhetünk el. A fázis kimenete egy tanítási és egy validációs adathalmaz lesz, melyet a hálózat tanítása során fogunk tudni majd felhasználni.
+
+Miután elkészült a tokenizált és kódolt bemenet, elkezdhetjük a hálózat tanítását. A \textit{torch} könyvtár tenzorai segítségével különböző csoportokra bontjuk a bemenetet egy \textit{DataCollator} osztályban, így lehetővé téve a GPU-n vagy TPU-n való párhuzamosítást. A \textit{Trainer} osztály segítségével és néhány argumentum megadása után végül elindíthatjuk a tanítást. A trainer jelenleg 4-es csoportokban képes az egyes GPU/TPU magokon tanítani a hálózatot, 100 lépésenként jelentést készít, illetve 500 lépésenként menti is a hálózat aktuális állapotát. Természetesen erősebb hardvereken meg lehet próbálni nagyobb csoportokban tanítani a hálózatot, de gyengébb hardvereken gyakran futhatunk ki a memóriából a nagyobb csoportszám miatt.
+
+Utolsó lépésben a szkript feltölti a Hugging Face Hub nevű platformra a hálózatot, ahonnan később a szerverünk letöltheti és használhatja azt.
+
+\SubSection{Szerveroldali komponens}
+
+Az alkalmazás szerveroldali nyelve a tanító komponenshez hasonlóan Python, mivel így sokkal egyszerűbben tudtuk kezelni a neurális hálózatot. A szerver Django keretrendszer segítségével lett elkészítve, mely biztosítja számunkra a könnyű és gyors futtatást és az eszköztárakat. A szerver konfigurációját tekintve nyílt, így lényegében bármely alkalmazás elérheti az interneten keresztül. Jelenleg adatbázist nem tartalmaz a szerver, így felhasználói és egyéb alkalmazás adatok nem kerülnek tárolásra a futás során.
+
+Szerveroldalon az egyetlen végpont, amit implementálnunk kellett az a \\
+\textit{api/generate-questions} nevű útvonal. Ez felel majd a megadott kontextushoz generált kérdések elkészítéséért. A \textit{transformers} könyvtárt itt is telepíteni kellett, hiszen szükségünk van a tokenizer-ünkre és a modellünkre a kérdések generálásához. A tokenizer és a modell definiálása után a megadott szöveges kontextust a tokenizer segítségével kódoljuk és átadjuk a modellünknek, hogy generáljon ez alapján kérdéseket. A generáláshoz, akár csak a modell tanításához számos paramétert adhatunk meg. Változtathatjuk a maximálisan kigenerálható kérdések mennyiségét, a kérdések hosszát, az egyes szavak maximális ismétlődését, illetve a dekódolási algoritmust is beállíthatjuk, ami lehet mohó keresés, sugár keresés, top-k mintavétel vagy top-p mintavétel is.
+
+A generált és dekódolt kimeneti kérdéseket végül szöveges tömb formájában adja vissza a szerver, JSON formátumban, amit aztán a kliens fel tud dolgozni.
+
+\SubSection{Kliensoldali komponens}
+
+A kliensoldal TypeScript-ben íródott és a Vue.js nevű frontend keretrendszert használtuk az elkészítéséhez, ami biztosítja a HTML, CSS, és JavaScript kódok összecsomagolását, optimalizálást, illetve a kódolást is jelentősen megkönnyíti. A kliensoldali működés oldalakra és komponensekre lett bontva. Két oldalt használ az alkalmazás: a főoldalt, ahol a kérdésgenerátor van, valamint egy leírás oldalt, ahol az alkalmazás használata és bemutatása van részletezve.
+
+Komponensek közül a \textit{QuestionGenerator} a legfontosabb, amely magát a kérdésgenerálás kliensoldali részét tartalmazza. Itt adott egy szövegdoboz, amibe a felhasználó beírhatja a szöveges kontextust, ami alapján szeretne kérdéseket generálni. Ezután a komponens kapcsolatot létesít a szerverrel és sikeres szerverválasz esetén megjeleníti az elkészült kérdéseket. A kérdések ezután egy segédfüggvény segítségével kimásolhatók és szabadon beilleszthetők bármilyen dokumentumba.
