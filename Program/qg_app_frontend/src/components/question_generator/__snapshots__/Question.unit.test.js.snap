@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`mount component 1`] = `
+"<div class=\\"question\\" value=\\"test\\" data-v-38b2495b=\\"\\"><span class=\\"content\\" data-v-38b2495b=\\"\\"></span>
+  <tooltip-stub text=\\"Copy to clipboard\\" data-v-38b2495b=\\"\\"></tooltip-stub>
+</div>"
+`;
